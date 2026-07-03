@@ -57,11 +57,9 @@
                 @endforeach
             </div>
 
-            @if(!empty($apiPayload))
-                <div class="api-note">
-                    Immagine caricata da PokeAPI.
-                </div>
-            @endif
+            <div class="api-note">
+                Immagine caricata da PokeAPI.
+            </div>
         </div>
     </div>
 </section>
