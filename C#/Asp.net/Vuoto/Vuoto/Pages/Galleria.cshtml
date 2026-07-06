@@ -1,0 +1,60 @@
+﻿@page
+@model Vuoto.Pages.GalleriaModel
+@using System.IO
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment WebHostEnvironment
+@{
+    ViewData["Title"] = "Galleria";
+
+    var cartellaImg = System.IO.Path.Combine(WebHostEnvironment.WebRootPath, "img");
+    IEnumerable<string> immagini = Array.Empty<string>();
+
+    if (Directory.Exists(cartellaImg))
+    {
+        var estensioni = new[] { "*.jpg", "*.jpeg", "*.png", "*.gif" };
+        immagini = estensioni.SelectMany(est => Directory.EnumerateFiles(cartellaImg, est));
+    }
+}
+
+<style>
+    /* Stile per le immagini della galleria */
+    .img-galleria {
+        width: 200px; /* Larghezza fissa */
+        height: 200px; /* Altezza fissa (crea un quadrato) */
+        object-fit: cover; /* Ritaglia l'immagine senza distorcerla */
+        border-radius: 8px; /* Opzionale: arrotonda leggermente gli angoli */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Opzionale: aggiunge un'ombra leggera */
+        transition: transform 0.2s; /* Opzionale: effetto fluido quando ci passi sopra */
+    }
+
+        /* Opzionale: l'immagine si ingrandisce leggermente al passaggio del mouse */
+        .img-galleria:hover {
+            transform: scale(1.05);
+        }
+
+    /* Spaziatura tra le celle della tabella */
+    table td {
+        padding: 10px;
+    }
+</style>
+
+<div class="text-center">
+    <h1>Galleria</h1>
+    <table>
+        <tr>
+            @if (Directory.Exists(cartellaImg) && immagini.Any())
+            {
+                @foreach (var percorsoFile in immagini)
+                {
+                    var nomeFile = System.IO.Path.GetFileName(percorsoFile);
+                    <td>
+                        <img src="/img/@nomeFile" alt="Immagine Galleria" class="img-galleria" />
+                    </td>
+                }
+            }
+            else
+            {
+                <td>Nessuna immagine trovata o cartella 'img' inesistente.</td>
+            }
+        </tr>
+    </table>
+</div>
