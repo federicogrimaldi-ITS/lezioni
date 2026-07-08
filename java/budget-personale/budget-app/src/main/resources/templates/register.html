@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrati - Budget Personale</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <div class="card auth-card">
+        <h1>Crea un account</h1>
+
+        <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <form th:action="@{/register}" th:object="${registerForm}" method="post">
+            <div class="form-group">
+                <label for="name">Nome</label>
+                <input type="text" id="name" th:field="*{name}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" th:field="*{password}" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Conferma Password</label>
+                <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required minlength="6">
+            </div>
+            <button type="submit" class="btn">Registrati</button>
+        </form>
+
+        <p class="small-text">Hai gia' un account? <a th:href="@{/login}">Accedi qui</a></p>
+    </div>
+</div>
+</body>
+</html>

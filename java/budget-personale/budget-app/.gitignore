@@ -1,0 +1,8 @@
+target/
+data/
+uploads/*
+!uploads/.gitkeep
+*.class
+.idea/
+*.iml
+.vscode/

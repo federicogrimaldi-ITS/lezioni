@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="navbar" class="navbar">
+    <div class="navbar-brand">💰 Budget Personale</div>
+    <nav class="navbar-links">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/transactions}">Transazioni</a>
+        <a th:href="@{/profile}">Profilo</a>
+        <a th:href="@{/logout}" class="logout-link">Logout</a>
+    </nav>
+</div>
+</body>
+</html>

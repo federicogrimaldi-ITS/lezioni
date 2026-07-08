@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transazioni - Budget Personale</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="actions-row">
+        <h1>Le tue Transazioni</h1>
+        <a th:href="@{/transactions/new}" class="btn">+ Nuova Transazione</a>
+    </div>
+
+    <div class="card">
+        <div class="filters">
+            <form th:action="@{/transactions}" method="get">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label for="category">Filtra per categoria</label>
+                    <select id="category" name="category" onchange="this.form.submit()">
+                        <option value="">Tutte</option>
+                        <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"
+                                th:selected="${c == selectedCategory}"></option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Data</th>
+                <th>Descrizione</th>
+                <th>Categoria</th>
+                <th>Tipo</th>
+                <th>Importo</th>
+                <th>Ricevuta</th>
+                <th>Azioni</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${transactions}">
+                <td th:text="${#temporals.format(t.date, 'dd/MM/yyyy')}"></td>
+                <td th:text="${t.description}"></td>
+                <td th:text="${t.category}"></td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${t.type.name() == 'ENTRATA'} ? 'badge-entrata' : 'badge-uscita'"
+                          th:text="${t.type}"></span>
+                </td>
+                <td th:text="${#numbers.formatDecimal(t.amount, 1, 2)} + ' €'"></td>
+                <td>
+                    <a th:if="${t.receipt != null}" class="receipt-link" th:href="@{/{path}(path=${t.receipt})}" target="_blank">Vedi</a>
+                    <span th:if="${t.receipt == null}" class="small-text">—</span>
+                </td>
+                <td>
+                    <a th:href="@{/transactions/{id}/edit(id=${t.id})}" class="btn btn-secondary">Modifica</a>
+                    <form th:action="@{/transactions/{id}/delete(id=${t.id})}" method="post" style="display:inline;"
+                          onsubmit="return confirm('Eliminare questa transazione?');">
+                        <button type="submit" class="btn btn-danger">Elimina</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${transactions.isEmpty()}">
+                <td colspan="7" class="small-text">Nessuna transazione trovata.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${transactionForm.id != null} ? 'Modifica Transazione' : 'Nuova Transazione'"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="card" style="max-width: 560px; margin: 0 auto;">
+        <h1 th:text="${transactionForm.id != null} ? 'Modifica Transazione' : 'Nuova Transazione'"></h1>
+
+        <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <form th:action="${transactionForm.id != null} ? @{/transactions/{id}(id=${transactionForm.id})} : @{/transactions}"
+              th:object="${transactionForm}" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="description">Descrizione</label>
+                <input type="text" id="description" th:field="*{description}">
+            </div>
+
+            <div class="form-group">
+                <label for="date">Data</label>
+                <input type="date" id="date" th:field="*{date}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Importo (€)</label>
+                <input type="number" step="0.01" min="0.01" id="amount" th:field="*{amount}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="type">Tipo</label>
+                <select id="type" th:field="*{type}" required>
+                    <option value="">-- Seleziona --</option>
+                    <option th:each="ty : ${types}" th:value="${ty}" th:text="${ty}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Categoria</label>
+                <select id="category" th:field="*{category}" required>
+                    <option value="">-- Seleziona --</option>
+                    <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="receiptFile">Ricevuta (JPG, PNG o PDF - facoltativa)</label>
+                <input type="file" id="receiptFile" th:field="*{receiptFile}" accept=".jpg,.jpeg,.png,.pdf">
+                <p class="small-text" th:if="${existingReceipt != null}">
+                    Ricevuta attuale: <a th:href="@{/{path}(path=${existingReceipt})}" target="_blank">visualizza</a>
+                    (carica un nuovo file per sostituirla)
+                </p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Salva</button>
+                <a th:href="@{/transactions}" class="btn btn-secondary">Annulla</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

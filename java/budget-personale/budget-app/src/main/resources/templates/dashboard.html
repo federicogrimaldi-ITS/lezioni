@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Budget Personale</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <h1>Ciao, <span th:text="${user.name}">Utente</span> 👋</h1>
+    <p class="small-text" th:if="${user.financialGoal != null and !user.financialGoal.isEmpty()}">
+        Obiettivo finanziario: <strong th:text="${user.financialGoal}"></strong>
+    </p>
+
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="label">Saldo Totale</div>
+            <div class="value" th:classappend="${stats.saldoTotale.signum() >= 0} ? 'text-green' : 'text-red'"
+                 th:text="${#numbers.formatDecimal(stats.saldoTotale, 1, 2)} + ' €'"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Totale Entrate</div>
+            <div class="value text-green" th:text="${#numbers.formatDecimal(stats.totalEntrate, 1, 2)} + ' €'"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Totale Uscite</div>
+            <div class="value text-red" th:text="${#numbers.formatDecimal(stats.totalUscite, 1, 2)} + ' €'"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Spese per Categoria</h2>
+        <div th:if="${stats.speseCategorie.isEmpty()}" class="small-text">Nessuna uscita registrata.</div>
+        <canvas id="categoryChart" height="120" th:if="${!stats.speseCategorie.isEmpty()}"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Bilancio Mensile</h2>
+        <div th:if="${stats.bilancioMensile.isEmpty()}" class="small-text">Nessuna transazione registrata.</div>
+        <canvas id="monthlyChart" height="120" th:if="${!stats.bilancioMensile.isEmpty()}"></canvas>
+    </div>
+
+    <a th:href="@{/transactions/new}" class="btn">+ Nuova Transazione</a>
+</div>
+
+<script th:inline="javascript">
+    const categoryLabels = /*[[${stats.speseCategorie.keySet()}]]*/ [];
+    const categoryValues = /*[[${stats.speseCategorie.values()}]]*/ [];
+    const monthlyLabels = /*[[${stats.bilancioMensile.![mese]}]]*/ [];
+    const monthlyEntrate = /*[[${stats.bilancioMensile.![entrate]}]]*/ [];
+    const monthlyUscite = /*[[${stats.bilancioMensile.![uscite]}]]*/ [];
+
+    if (categoryLabels.length > 0) {
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryValues,
+                    backgroundColor: ['#2563eb', '#dc2626', '#f59e0b', '#16a34a', '#7c3aed', '#0891b2']
+                }]
+            }
+        });
+    }
+
+    if (monthlyLabels.length > 0) {
+        new Chart(document.getElementById('monthlyChart'), {
+            type: 'bar',
+            data: {
+                labels: monthlyLabels,
+                datasets: [
+                    { label: 'Entrate', data: monthlyEntrate, backgroundColor: '#16a34a' },
+                    { label: 'Uscite', data: monthlyUscite, backgroundColor: '#dc2626' }
+                ]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+    }
+</script>
+</body>
+</html>

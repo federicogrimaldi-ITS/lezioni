@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Errore - Budget Personale</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <div class="card auth-card">
+        <h1>Ops! Si e' verificato un errore</h1>
+        <p class="small-text" th:if="${status}">Codice: <span th:text="${status}"></span></p>
+        <div class="alert alert-error" th:text="${errorMessage}"></div>
+        <a href="/" class="btn">Torna alla home</a>
+    </div>
+</div>
+</body>
+</html>

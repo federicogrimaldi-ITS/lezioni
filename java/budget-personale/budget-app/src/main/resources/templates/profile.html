@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profilo - Budget Personale</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="card" style="max-width: 560px; margin: 0 auto;">
+        <h1>Il tuo Profilo</h1>
+
+        <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+
+        <form th:action="@{/profile}" th:object="${profileForm}" method="post">
+            <div class="form-group">
+                <label for="name">Nome</label>
+                <input type="text" id="name" th:field="*{name}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="financialGoal">Obiettivo finanziario</label>
+                <input type="text" id="financialGoal" th:field="*{financialGoal}" placeholder="es. Risparmiare per un viaggio">
+            </div>
+
+            <hr>
+            <h3>Cambia password</h3>
+            <p class="small-text">Lascia vuoto se non vuoi modificare la password.</p>
+
+            <div class="form-group">
+                <label for="currentPassword">Password attuale</label>
+                <input type="password" id="currentPassword" th:field="*{currentPassword}">
+            </div>
+
+            <div class="form-group">
+                <label for="newPassword">Nuova password</label>
+                <input type="password" id="newPassword" th:field="*{newPassword}" minlength="6">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmNewPassword">Conferma nuova password</label>
+                <input type="password" id="confirmNewPassword" th:field="*{confirmNewPassword}" minlength="6">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Salva Modifiche</button>
+            </div>
+        </form>
+
+        <p class="small-text" style="margin-top:1.5rem;">
+            Account creato il <span th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}"></span>
+        </p>
+    </div>
+</div>
+</body>
+</html>
