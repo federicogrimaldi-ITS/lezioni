@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Country;
+use App\Entities\Country;
 use Illuminate\Http\Request;
 
 class AllenamentoController extends Controller

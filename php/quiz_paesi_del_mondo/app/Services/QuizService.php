@@ -2,8 +2,7 @@
 
 namespace App\Services;
 
-use App\Domain\Quiz\Domanda;
-use App\Domain\Quiz\GestoreDomande;
+use App\Entities\Domanda;
 use Illuminate\Support\Facades\Session;
 use LogicException;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Quiz\GestoreDomande;
+use App\Services\GestoreDomande;
 
 class HomeController extends Controller
 {

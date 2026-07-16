@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Quiz\GestoreDomande;
+use App\Services\GestoreDomande;
 use App\Services\QuizService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
